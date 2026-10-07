@@ -1,15 +1,16 @@
 <script lang="ts">
+  import PixelSprite from './PixelSprite.svelte'
   let { onPlayAgain }: { onPlayAgain: () => void } = $props()
 </script>
 
 <div class="complete-backdrop station-backdrop" role="presentation">
   <div class="station-card" role="dialog" aria-modal="true" aria-labelledby="station-title">
-    <div class="station-sky"><span>✦</span><span>☁</span><span>✦</span></div>
-    <div class="celebration">✦ ✦ ✦</div>
+    <div class="station-sky"><i></i><b></b><i></i></div>
+    <div class="celebration">・ ・ ・</div>
     <p class="eyebrow">FOREST STATION</p>
     <h2 id="station-title">どんぐり駅、完成！</h2>
     <p>みんなが無事に帰ってきて、<br />駅もすっかりにぎやかになったよ。</p>
-    <div class="station-finale" aria-hidden="true"><span>🌲</span><b>🏠</b><span>🌲</span></div>
+    <div class="station-finale" aria-hidden="true"><PixelSprite name="tree" /><PixelSprite name="house" /><PixelSprite name="tree" /></div>
     <button class="primary-button finale-button" onclick={onPlayAgain}>最初からあそぶ</button>
   </div>
 </div>

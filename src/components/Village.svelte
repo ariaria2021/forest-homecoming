@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PixelSprite from './PixelSprite.svelte'
   let { stationLevel, acorns }: { stationLevel: number; acorns: number } = $props()
 
   const stationCopy = ['古い駅を直そう', '屋根ができた！', 'みんなのどんぐり駅']
@@ -19,5 +20,5 @@
     {#if stationLevel >= 2}<span class="station-flag">★</span>{/if}
   </div>
   <div class="station-caption">{stationCopy[stationLevel]}</div>
-  <div class="acorn-bank" aria-label={`どんぐり ${acorns}個`}><span>♧</span> {acorns}</div>
+  <div class="acorn-bank" aria-label={`どんぐり ${acorns}個`}><PixelSprite name="acorn" /> {acorns}</div>
 </section>

@@ -17,6 +17,7 @@ export type Stage = {
   rows: number
   cols: number
   carts: Cart[]
+  par?: number
 }
 
 export type GameState = {
@@ -85,3 +86,12 @@ export const departCart = (state: GameState, id: string): GameState => {
 }
 
 export const isCleared = (state: GameState): boolean => state.carts.length === 0
+
+export const parFor = (stage: Stage): number => stage.par ?? stage.carts.length
+
+export const starsFor = (moves: number, stage: Stage): 1 | 2 | 3 => {
+  const par = parFor(stage)
+  if (moves <= par) return 3
+  if (moves <= par + 2) return 2
+  return 1
+}

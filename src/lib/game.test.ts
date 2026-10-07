@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canDepart, createGame, departCart, isCleared, stages, type GameState } from './game'
+import { canDepart, createGame, departCart, isCleared, parFor, starsFor, stages, type GameState } from './game'
 
 const canSolve = (state: GameState): boolean => {
   if (isCleared(state)) return true
@@ -31,5 +31,12 @@ describe('forest homecoming game engine', () => {
 
   it('ships only solvable stage layouts', () => {
     for (const stage of stages) expect(canSolve(createGame(stage)), stage.name).toBe(true)
+  })
+
+  it('awards stars from the stage par and attempted moves', () => {
+    const stage = stages[2]
+    expect(starsFor(parFor(stage), stage)).toBe(3)
+    expect(starsFor(parFor(stage) + 2, stage)).toBe(2)
+    expect(starsFor(parFor(stage) + 3, stage)).toBe(1)
   })
 })
