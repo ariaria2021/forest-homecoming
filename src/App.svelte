@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import Board from './components/Board.svelte'
   import CompleteCard from './components/CompleteCard.svelte'
   import StationCard from './components/StationCard.svelte'
@@ -21,14 +21,23 @@
   let showStages = $state(false)
   let moves = $state(0)
   let bestMoves = $state<Record<number, number>>({})
+  let departureTimer: number | null = null
+  let gameSession = 0
   const stationLevel = $derived(completed.length >= 8 ? 2 : completed.length >= 3 ? 1 : 0)
   const acorns = $derived(completed.length * 3)
   const cleared = $derived(isCleared(game))
 
+  const cancelDeparture = () => {
+    gameSession += 1
+    if (departureTimer !== null) window.clearTimeout(departureTimer)
+    departureTimer = null
+    departingId = null
+  }
+
   const startStage = (index: number) => {
+    cancelDeparture()
     stageIndex = index
     game = createGame(stages[index])
-    departingId = null
     notice = ''
     moves = 0
   }
@@ -48,7 +57,10 @@
     }
     departingId = id
     notice = ''
-    window.setTimeout(() => {
+    const session = gameSession
+    departureTimer = window.setTimeout(() => {
+      if (session !== gameSession) return
+      departureTimer = null
       game = departCart(game, id)
       departingId = null
       if (isCleared(game) && !completed.includes(game.stage.id)) {
@@ -93,6 +105,8 @@
       localStorage.removeItem(SAVE_KEY)
     }
   })
+
+  onDestroy(cancelDeparture)
 </script>
 
 <svelte:head><title>もりの帰り道</title><meta name="description" content="動物カートを帰して、どんぐり駅を育てる小さな交通パズル" /></svelte:head>
