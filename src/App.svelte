@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import Board from './components/Board.svelte'
   import CompleteCard from './components/CompleteCard.svelte'
+  import StationCard from './components/StationCard.svelte'
   import Village from './components/Village.svelte'
   import { canDepart, createGame, departCart, isCleared, stages, type GameState } from './lib/game'
 
@@ -13,6 +14,7 @@
   let game = $state<GameState>(createGame(stages[0]))
   let departingId = $state<string | null>(null)
   let notice = $state('')
+  let showStation = $state(false)
   const stationLevel = $derived(completed.length >= 8 ? 2 : completed.length >= 3 ? 1 : 0)
   const acorns = $derived(completed.length * 3)
   const cleared = $derived(isCleared(game))
@@ -46,12 +48,17 @@
         completed = nextCompleted
         persist(nextCompleted, stageIndex + 1)
       }
-    }, 340)
+    }, 560)
   }
 
   const retry = () => startStage(stageIndex)
   const nextStage = () => {
     if (stageIndex < stages.length - 1) startStage(stageIndex + 1)
+  }
+  const visitStation = () => showStation = true
+  const playAgain = () => {
+    showStation = false
+    startStage(0)
   }
 
   onMount(() => {
@@ -86,7 +93,10 @@
 
   <footer class="footer-note"><span>✦</span> みんなをおうちへ帰して、駅をきれいにしよう。</footer>
 
-  {#if cleared}
-    <CompleteCard stageNumber={game.stage.id} isLast={stageIndex === stages.length - 1} onNext={nextStage} onRetry={retry} />
+  {#if cleared && !showStation}
+    <CompleteCard stageNumber={game.stage.id} isLast={stageIndex === stages.length - 1} onNext={stageIndex === stages.length - 1 ? visitStation : nextStage} onRetry={retry} />
+  {/if}
+  {#if showStation}
+    <StationCard onPlayAgain={playAgain} />
   {/if}
 </main>
