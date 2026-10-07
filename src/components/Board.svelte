@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { Cart, Direction, GameState } from '../lib/game'
+  import PixelSprite from './PixelSprite.svelte'
 
   let { game, departingId, onCart }: { game: GameState; departingId: string | null; onCart: (id: string) => void } = $props()
 
   const arrow: Record<Direction, string> = { up: '↑', right: '→', down: '↓', left: '←' }
-  const animal: Record<Cart['animal'], string> = { fox: '🦊', bunny: '🐰', bear: '🐻', cat: '🐱' }
+  const animal: Record<Cart['animal'], string> = { fox: 'キツネ', bunny: 'ウサギ', bear: 'クマ', cat: 'ネコ' }
 
   const cartStyle = (item: Cart) => {
     const vertical = item.direction === 'up' || item.direction === 'down'
@@ -40,7 +41,7 @@
         onclick={() => onCart(item.id)}
         aria-label={`${animal[item.animal]}のカートを${arrow[item.direction]}へ帰す`}
       >
-        <span class="cart-animal">{animal[item.animal]}</span>
+        <PixelSprite name={item.animal} label={animal[item.animal]} className="cart-animal" />
         <span class="cart-arrow">{arrow[item.direction]}</span>
       </button>
     {/each}
