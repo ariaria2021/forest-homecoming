@@ -11,7 +11,13 @@
     const length = item.length ?? 1
     const rowEnd = vertical ? item.row + length : item.row + 1
     const colEnd = vertical ? item.col + 1 : item.col + length
-    return `grid-row:${item.row + 1} / ${rowEnd + 1}; grid-column:${item.col + 1} / ${colEnd + 1}; --direction:${item.direction};`
+    const exits: Record<Direction, string> = {
+      up: '--exit-x:0;--exit-y:-800%;',
+      right: '--exit-x:800%;--exit-y:0;',
+      down: '--exit-x:0;--exit-y:800%;',
+      left: '--exit-x:-800%;--exit-y:0;',
+    }
+    return `grid-row:${item.row + 1} / ${rowEnd + 1}; grid-column:${item.col + 1} / ${colEnd + 1}; ${exits[item.direction]}`
   }
 </script>
 
